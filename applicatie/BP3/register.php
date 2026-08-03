@@ -14,7 +14,7 @@ require_once 'includes/navigation.php';
                 Create an account to save your delivery information and order faster.
             </p>
 
-            <form action="profile.html" method="post">
+            <form action="profile.php" method="post">
 
                 <label for="firstname">First Name</label>
                 <input type="text" id="firstname" name="firstname" required>

@@ -1,6 +1,18 @@
 <?php
 require_once 'includes/header.php';
 require_once 'includes/navigation.php';
+require_once 'includes/db_connection.php';
+
+$connection = createConnection();
+
+$sql = "
+    SELECT name, price
+    FROM Product
+    WHERE type_id = 'Pizza'
+";
+
+$products = $connection->query($sql);
+
 ?>
 
 <main>

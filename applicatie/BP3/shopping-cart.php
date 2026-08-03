@@ -39,7 +39,7 @@ require_once 'includes/navigation.php';
             </tbody>
         </table>
 
-        <a href="checkout.html" class="btn">Checkout</a>
+        <a href="checkout.php" class="btn">Checkout</a>
 
     </section>
 </main>

@@ -14,7 +14,7 @@ require_once 'includes/navigation.php';
                 Access the staff dashboard and manage customer orders.
             </p>
 
-            <form action="staff-orders.html" method="post">
+            <form action="staff-orders.php" method="post">
 
                 <label for="email">Employee Email</label>
                 <input type="email" id="email" name="email" required>

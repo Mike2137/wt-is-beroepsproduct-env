@@ -8,7 +8,7 @@ require_once 'includes/navigation.php';
 
         <h1>Delivery Information</h1>
 
-        <form action="order-confirmation.html" method="post">
+        <form action="my-orders.php" method="post">
 
             <label for="name">Full Name</label>
             <input type="text" id="name" name="name" required>

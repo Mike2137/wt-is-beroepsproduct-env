@@ -11,7 +11,7 @@ require_once 'includes/navigation.php';
             <h1>Login</h1>
             <p>Log in to place orders faster and manage your profile.</p>
 
-            <form action="../pages/my-orders.html" method="post">
+            <form action="my-orders.php" method="post">
 
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" required>
@@ -27,12 +27,12 @@ require_once 'includes/navigation.php';
 
             <p class="register-link">
                 Don't have an account?
-                <a href="register.html">Register here</a>
+                <a href="register.php">Register here</a>
             </p>
 
             <p class="employee-link">
                 Employee?
-                <a href="login-employee.html">Staff Login</a>
+                <a href="login-employee.php">Staff Login</a>
             </p>
 
         </div>

@@ -35,7 +35,7 @@ require_once 'includes/navigation.php';
             </form>
 
             <p class="customer-link">
-                <a href="login-customer.html">Customer Login</a>
+                <a href="login-customer.php">Customer Login</a>
             </p>
 
         </div>

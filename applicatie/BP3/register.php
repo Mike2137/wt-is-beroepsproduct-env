@@ -54,7 +54,7 @@ require_once 'includes/navigation.php';
 
             <p class="login-link">
                 Already have an account?
-                <a href="../pages/login-customer.html">Login here</a>
+                <a href="login-customer.php">Login here</a>
             </p>
 
         </div>

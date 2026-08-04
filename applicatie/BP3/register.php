@@ -14,7 +14,7 @@ require_once 'includes/navigation.php';
                 Create an account to save your delivery information and order faster.
             </p>
 
-            <form action="profile.php" method="post">
+            <form method="post">
 
                 <label for="firstname">First Name</label>
                 <input type="text" id="firstname" name="firstname" required>
@@ -22,29 +22,17 @@ require_once 'includes/navigation.php';
                 <label for="lastname">Last Name</label>
                 <input type="text" id="lastname" name="lastname" required>
 
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required>
+                <label for="username">Email Address</label>
+                <input type="email" id="username" name="username" required>
 
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone">
-
-                <label for="street">Street Address</label>
-                <input type="text" id="street" name="street" required>
-
-                <label for="house-number">House Number</label>
-                <input type="text" id="house-number" name="house-number" required>
-
-                <label for="postal-code">Postal Code</label>
-                <input type="text" id="postal-code" name="postal-code" required>
-
-                <label for="city">City</label>
-                <input type="text" id="city" name="city" required>
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" placeholder="Street and house number" required>
 
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
 
-                <label for="confirm-password">Confirm Password</label>
-                <input type="password" id="confirm-password" name="confirm-password" required>
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
 
                 <button type="submit" class="btn">
                     Register

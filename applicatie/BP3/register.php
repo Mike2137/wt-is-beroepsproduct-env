@@ -1,6 +1,62 @@
 <?php
 require_once 'includes/header.php';
 require_once 'includes/navigation.php';
+require_once 'includes/db_connection.php';
+
+$connection = createConnection();
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $firstName = $_POST['firstname'];
+    $lastName = $_POST['lastname'];
+    $username = $_POST['username'];
+    $address = $_POST['address'];
+    $password = $_POST['password'];
+    $confirmPassword = $_POST['confirm_password'];
+
+    if ($password !== $confirmPassword) {
+        echo "Passwords do not match.";
+        exit;
+    }
+
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $sql = "
+        INSERT INTO [User] (
+            username,
+            password,
+            first_name,
+            last_name,
+            address,
+            role
+        )
+        VALUES (
+            :username,
+            :password,
+            :first_name,
+            :last_name,
+            :address,
+            :role
+        )
+    ";
+
+    $statement = $connection->prepare($sql);
+
+    $statement->execute([
+        ':username' => $username,
+        ':password' => $hashedPassword,
+        ':first_name' => $firstName,
+        ':last_name' => $lastName,
+        ':address' => $address,
+        ':role' => 'customer'
+    ]);
+
+    header("Location: login-customer.php");
+    exit;
+}
+
+
+
+
 ?>
 
 <main>

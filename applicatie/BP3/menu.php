@@ -3,8 +3,18 @@ session_start();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $productName = $_POST['product_name'];
-    $_SESSION['cart'][] = $productName;
+
+    if (!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = [];
+    }
+
+    if (isset($_SESSION['cart'][$productName])) {
+        $_SESSION['cart'][$productName]++;
+    } else {
+        $_SESSION['cart'][$productName] = 1;
+    }
 }
+
 
 require_once 'includes/header.php';
 require_once 'includes/navigation.php';

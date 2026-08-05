@@ -1,6 +1,11 @@
 <?php
+session_start();
+
 require_once 'includes/header.php';
 require_once 'includes/navigation.php';
+require_once 'includes/db_connection.php';
+
+$connection = createConnection();
 ?>
 
 <main>
@@ -8,36 +13,56 @@ require_once 'includes/navigation.php';
 
         <h1>Your Order</h1>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Pizza</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Subtotal</th>
-                </tr>
-            </thead>
+        <?php if (empty($_SESSION['cart'])): ?>
 
-            <tbody>
-                <tr>
-                    <td>Margherita</td>
-                    <td>€12.95</td>
-                    <td>
-                        <input type="number" min="1" value="2">
-                    </td>
-                    <td>€25.90</td>
-                </tr>
+            <p>Your shopping cart is empty.</p>
 
-                <tr>
-                    <td>Diavola</td>
-                    <td>€15.50</td>
-                    <td>
-                        <input type="number" min="1" value="1">
-                    </td>
-                    <td>€15.50</td>
-                </tr>
-            </tbody>
-        </table>
+        <?php else: ?>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pizza</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <?php foreach ($_SESSION['cart'] as $productName): ?>
+
+                        <?php
+                        $sql = "
+            SELECT name, price
+            FROM Product
+            WHERE name = :name
+        ";
+
+                        $statement = $connection->prepare($sql);
+
+                        $statement->execute([
+                            ':name' => $productName
+                        ]);
+
+                        $product = $statement->fetch(PDO::FETCH_ASSOC);
+                        ?>
+
+                        <tr>
+                            <td><?= htmlspecialchars($product['name']) ?></td>
+
+                            <td>€<?= number_format($product['price'], 2) ?></td>
+
+                            <td>1</td>
+
+                            <td>€<?= number_format($product['price'], 2) ?></td>
+                        </tr>
+
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+
+        <?php endif; ?>
 
         <a href="checkout.php" class="btn">Checkout</a>
 

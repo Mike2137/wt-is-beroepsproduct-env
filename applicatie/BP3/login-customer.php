@@ -8,7 +8,31 @@ require_once 'includes/navigation.php';
 $connection = createConnection();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $sql = "SELECT * FROM [User] WHERE username = :username";
+
+    $statement = $connection->prepare($sql);
+
+    $statement->execute([
+        ':username' => $username
+    ]);
+
+    $user = $statement->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['first_name'] = $user['first_name'];
+        $_SESSION['role'] = $user['role'];
+
+        header("Location: my-orders.php");
+        exit;
+    } else {
+        echo "Invalid username or password.";
+    }
 }
+
 ?>
 
 <main>

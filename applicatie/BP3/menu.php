@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $productName = $_POST['product_name'];
+    $_SESSION['cart'][] = $productName;
+}
+
 require_once 'includes/header.php';
 require_once 'includes/navigation.php';
 require_once 'includes/db_connection.php';
@@ -34,7 +41,16 @@ $products = $connection->query($sql);
 
                     <p>€<?= number_format($product['price'], 2) ?></p>
 
-                    <a href="shopping-cart.php" class="btn card-button">Order Now</a>
+                    <form method="post">
+                        <input
+                            type="hidden"
+                            name="product_name"
+                            value="<?= htmlspecialchars($product['name']) ?>">
+
+                        <button type="submit" class="btn card-button">
+                            Order Now
+                        </button>
+                    </form>
                 </article>
             <?php endforeach; ?>
         </div>

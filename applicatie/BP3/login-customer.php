@@ -1,6 +1,14 @@
 <?php
+session_start();
+
+require_once 'includes/db_connection.php';
 require_once 'includes/header.php';
 require_once 'includes/navigation.php';
+
+$connection = createConnection();
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+}
 ?>
 
 <main>
@@ -11,10 +19,10 @@ require_once 'includes/navigation.php';
             <h1>Login</h1>
             <p>Log in to place orders faster and manage your profile.</p>
 
-            <form action="my-orders.php" method="post">
+            <form method="post">
 
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required>
+                <label for="username">Email Address</label>
+                <input type="email" id="username" name="username" required>
 
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>

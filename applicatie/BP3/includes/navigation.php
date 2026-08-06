@@ -10,7 +10,9 @@
         </a>
 
         <ul class="nav-right">
+            <li><a href="shopping-cart.php">CART</a></li>
             <li><a href="login-customer.php">LOGIN | REGISTER</a></li>
+
         </ul>
     </nav>
 </header>

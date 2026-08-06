@@ -1,7 +1,33 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login-customer.php");
+    exit;
+}
+
 require_once 'includes/header.php';
 require_once 'includes/navigation.php';
+require_once 'includes/db_connection.php';
 
+$connection = createConnection();
+
+$username = $_SESSION['username'];
+
+$sql = "
+    SELECT order_id, datetime, status
+    FROM Pizza_Order
+    WHERE client_username = :username
+    ORDER BY datetime DESC
+";
+
+$statement = $connection->prepare($sql);
+
+$statement->execute([
+    ':username' => $username
+]);
+
+$orders = $statement->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -23,26 +49,58 @@ require_once 'includes/navigation.php';
 
             <tbody>
 
-                <tr>
-                    <td>#1001</td>
-                    <td>22-06-2026</td>
-                    <td>2x Margherita, 1x Diavola</td>
-                    <td>In Oven</td>
-                </tr>
+                <?php foreach ($orders as $order): ?>
 
-                <tr>
-                    <td>#1000</td>
-                    <td>21-06-2026</td>
-                    <td>1x Quattro Formaggi</td>
-                    <td>Delivered</td>
-                </tr>
+                    <?php
+                    $sql = "
+            SELECT product_name, quantity
+            FROM Pizza_Order_Product
+            WHERE order_id = :order_id
+        ";
 
-                <tr>
-                    <td>#999</td>
-                    <td>20-06-2026</td>
-                    <td>1x Siciliana</td>
-                    <td>On The Way</td>
-                </tr>
+                    $statement = $connection->prepare($sql);
+
+                    $statement->execute([
+                        ':order_id' => $order['order_id']
+                    ]);
+
+                    $items = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+                    $itemList = [];
+
+                    foreach ($items as $item) {
+                        $itemList[] = $item['quantity'] . "x " . $item['product_name'];
+                    }
+
+                    switch ($order['status']) {
+                        case 1:
+                            $status = "Pending";
+                            break;
+
+                        case 2:
+                            $status = "Preparing";
+                            break;
+
+                        case 3:
+                            $status = "Delivered";
+                            break;
+
+                        default:
+                            $status = "Unknown";
+                    }
+                    ?>
+
+                    <tr>
+                        <td>#<?= $order['order_id'] ?></td>
+
+                        <td><?= date('d-m-Y', strtotime($order['datetime'])) ?></td>
+
+                        <td><?= implode(", ", $itemList) ?></td>
+
+                        <td><?= $status ?></td>
+                    </tr>
+
+                <?php endforeach; ?>
 
             </tbody>
 

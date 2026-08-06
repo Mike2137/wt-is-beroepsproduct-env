@@ -5,6 +5,28 @@ require_once 'includes/db_connection.php';
 
 $connection = createConnection();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $orderId = $_POST['order_id'];
+    $status = $_POST['status'];
+
+    $sql = "
+        UPDATE Pizza_Order
+        SET status = :status
+        WHERE order_id = :order_id
+    ";
+
+    $statement = $connection->prepare($sql);
+
+    $statement->execute([
+        ':status' => $status,
+        ':order_id' => $orderId
+    ]);
+
+    header("Location: staff-orders.php");
+    exit;
+}
+
 $sql = "
 SELECT
     po.order_id,
@@ -71,18 +93,24 @@ foreach ($results as $row) {
                 <?php endforeach; ?>
             </ul>
 
-            <label for="status<?= $orderId ?>">Order Status</label>
+            <form method="POST">
 
-            <select id="status<?= $orderId ?>">
-                <option <?= $order['status'] == 1 ? 'selected' : '' ?>>Received</option>
-                <option <?= $order['status'] == 2 ? 'selected' : '' ?>>Preparing</option>
-                <option <?= $order['status'] == 3 ? 'selected' : '' ?>>In Oven</option>
-                <option <?= $order['status'] == 4 ? 'selected' : '' ?>>Ready for Delivery</option>
-                <option <?= $order['status'] == 5 ? 'selected' : '' ?>>On The Way</option>
-                <option <?= $order['status'] == 6 ? 'selected' : '' ?>>Delivered</option>
-            </select>
+                <input type="hidden" name="order_id" value="<?= $orderId ?>">
 
-            <button>Update Status</button>
+                <label for="status<?= $orderId ?>">Order Status</label>
+
+                <select name="status" id="status<?= $orderId ?>">
+                    <option value="1" <?= $order['status'] == 1 ? 'selected' : '' ?>>Received</option>
+                    <option value="2" <?= $order['status'] == 2 ? 'selected' : '' ?>>Preparing</option>
+                    <option value="3" <?= $order['status'] == 3 ? 'selected' : '' ?>>In Oven</option>
+                    <option value="4" <?= $order['status'] == 4 ? 'selected' : '' ?>>Ready for Delivery</option>
+                    <option value="5" <?= $order['status'] == 5 ? 'selected' : '' ?>>On The Way</option>
+                    <option value="6" <?= $order['status'] == 6 ? 'selected' : '' ?>>Delivered</option>
+                </select>
+
+                <button type="submit">Update Status</button>
+
+            </form>
 
         </div>
 

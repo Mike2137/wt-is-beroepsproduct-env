@@ -1,31 +1,92 @@
 <?php
 require_once 'includes/header.php';
 require_once 'includes/navigation.php';
+require_once 'includes/db_connection.php';
+
+$connection = createConnection();
+
+$sql = "
+SELECT
+    po.order_id,
+    po.client_name,
+    po.datetime,
+    po.status,
+    pop.product_name,
+    pop.quantity,
+    p.price
+FROM Pizza_Order AS po
+JOIN Pizza_Order_Product AS pop
+    ON po.order_id = pop.order_id
+JOIN Product AS p
+    ON pop.product_name = p.name
+ORDER BY po.datetime DESC;
+";
+
+$results = $connection->query($sql);
+
+$orders = [];
+
+foreach ($results as $row) {
+
+    $orderId = $row['order_id'];
+
+    if (!isset($orders[$orderId])) {
+        $orders[$orderId] = [
+            'client_name' => $row['client_name'],
+            'datetime' => $row['datetime'],
+            'status' => $row['status'],
+            'products' => []
+        ];
+    }
+
+    $orders[$orderId]['products'][] = [
+        'name' => $row['product_name'],
+        'quantity' => $row['quantity'],
+        'price' => $row['price']
+    ];
+}
 ?>
 
 <main class="staff-orders">
     <h1>Staff orders:</h1>
-    <div class="order-card">
-        <h2>Order #1001</h2>
+    <?php foreach ($orders as $orderId => $order): ?>
 
-        <p>Customer: Mike Winner</p>
-        <p>Items: Margherita Pizza, Cola</p>
+        <div class="order-card">
 
-        <label for="status1001">Order Status</label>
+            <h2>Order #<?= $orderId ?></h2>
 
-        <select id="status1001">
-            <option>Received</option>
-            <option selected>Preparing</option>
-            <option>In Oven</option>
-            <option>Ready for Delivery</option>
-            <option>On The Way</option>
-            <option>Delivered</option>
-        </select>
+            <p>Customer: <?= htmlspecialchars($order['client_name']) ?></p>
 
-        <button>Update Status</button>
-    </div>
+            <p>Date: <?= $order['datetime'] ?></p>
 
+            <p><strong>Items:</strong></p>
 
+            <ul>
+                <?php foreach ($order['products'] as $product): ?>
+                    <li>
+                        <?= $product['quantity'] ?>x
+                        <?= htmlspecialchars($product['name']) ?>
+                        - €<?= number_format($product['price'] * $product['quantity'], 2) ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <label for="status<?= $orderId ?>">Order Status</label>
+
+            <select id="status<?= $orderId ?>">
+                <option <?= $order['status'] == 1 ? 'selected' : '' ?>>Received</option>
+                <option <?= $order['status'] == 2 ? 'selected' : '' ?>>Preparing</option>
+                <option <?= $order['status'] == 3 ? 'selected' : '' ?>>In Oven</option>
+                <option <?= $order['status'] == 4 ? 'selected' : '' ?>>Ready for Delivery</option>
+                <option <?= $order['status'] == 5 ? 'selected' : '' ?>>On The Way</option>
+                <option <?= $order['status'] == 6 ? 'selected' : '' ?>>Delivered</option>
+            </select>
+
+            <button>Update Status</button>
+
+        </div>
+
+    <?php endforeach; ?>
 </main>
 
 <?php

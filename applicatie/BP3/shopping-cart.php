@@ -99,7 +99,9 @@ $connection = createConnection();
             </table>
             <h2>Total: €<?= number_format($total, 2) ?></h2>
 
-            <a href="checkout.php" class="btn">Checkout</a>
+            <div>
+                <a href="checkout.php" class="btn">Checkout</a>
+            </div>
 
         <?php endif; ?>
 

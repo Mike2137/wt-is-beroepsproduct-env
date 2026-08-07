@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['first_name'] = $user['first_name'];
         $_SESSION['role'] = $user['role'];
 
-        if ($user['role'] === 'employee') {
+        if ($user['role'] === 'Personnel') {
             header("Location: staff-orders.php");
         } else {
             header("Location: my-orders.php");
@@ -50,8 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <form method="post">
 
-                <label for="username">Email Address</label>
-                <input type="email" id="username" name="username" required>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
 
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>

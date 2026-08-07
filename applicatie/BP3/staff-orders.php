@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Personnel') {
+    header("Location: login.php");
+    exit;
+}
+
 require_once 'includes/header.php';
 require_once 'includes/navigation.php';
 require_once 'includes/db_connection.php';

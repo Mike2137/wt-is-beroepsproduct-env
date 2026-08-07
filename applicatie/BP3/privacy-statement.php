@@ -1,4 +1,7 @@
 <?php
+$pageTitle = "We really truely genuinely care about your privacy and won't sell your data for monetary gain like we always do. We promise.";
+
+
 require_once 'includes/header.php';
 require_once 'includes/navigation.php';
 ?>

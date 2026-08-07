@@ -1,4 +1,6 @@
 <?php
+$pageTitle = "Staff Orders";
+
 session_start();
 
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Personnel') {

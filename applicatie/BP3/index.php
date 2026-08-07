@@ -1,4 +1,6 @@
 <?php
+$pageTitle = "Home";
+
 require_once 'includes/header.php';
 require_once 'includes/navigation.php';
 ?>

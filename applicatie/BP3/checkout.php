@@ -1,4 +1,6 @@
 <?php
+$pageTitle = "Checkout";
+
 session_start();
 
 if (!isset($_SESSION['username'])) {

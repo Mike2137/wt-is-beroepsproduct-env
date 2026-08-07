@@ -1,4 +1,6 @@
 <?php
+$pageTitle = "Login";
+
 session_start();
 
 require_once 'includes/db_connection.php';

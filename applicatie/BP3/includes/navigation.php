@@ -25,7 +25,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
             <?php else: ?>
 
-                <li><a href="login-customer.php">LOGIN | REGISTER</a></li>
+                <li><a href="login.php">LOGIN | REGISTER</a></li>
 
             <?php endif; ?>
 

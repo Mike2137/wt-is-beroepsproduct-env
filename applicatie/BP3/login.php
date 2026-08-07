@@ -26,7 +26,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['first_name'] = $user['first_name'];
         $_SESSION['role'] = $user['role'];
 
-        header("Location: my-orders.php");
+        if ($user['role'] === 'employee') {
+            header("Location: staff-orders.php");
+        } else {
+            header("Location: my-orders.php");
+        }
+
         exit;
     } else {
         echo "Invalid username or password.";
@@ -61,12 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 Don't have an account?
                 <a href="register.php">Register here</a>
             </p>
-
-            <p class="employee-link">
-                Employee?
-                <a href="login-employee.php">Staff Login</a>
-            </p>
-
         </div>
 
     </section>

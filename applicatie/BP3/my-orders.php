@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'customer') {
+    header("Location: login.php");
+    exit;
+}
+
 if (!isset($_SESSION['username'])) {
     header("Location: login-customer.php");
     exit;

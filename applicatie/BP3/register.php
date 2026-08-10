@@ -55,10 +55,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     header("Location: login-customer.php");
     exit;
 }
-
-
-
-
 ?>
 
 <main>
@@ -80,8 +76,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <label for="lastname">Last Name</label>
                 <input type="text" id="lastname" name="lastname" required>
 
-                <label for="username">Email Address</label>
-                <input type="email" id="username" name="username" required>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
 
                 <label for="address">Address</label>
                 <input type="text" id="address" name="address" placeholder="Street and house number" required>

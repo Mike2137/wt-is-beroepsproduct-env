@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         exit;
     } else {
-        echo "Invalid username or password.";
+        $errorMessage = "Invalid username or password.";
     }
 }
 
@@ -50,6 +50,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <h1>Login</h1>
             <p>Log in to place orders faster and manage your profile.</p>
 
+
+
+
             <form method="post">
 
                 <label for="username">Username</label>
@@ -61,6 +64,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <button type="submit" class="btn">
                     Login
                 </button>
+
+                <?php if (isset($errorMessage)): ?>
+                    <p class="error-message"><?= $errorMessage ?></p>
+                <?php endif; ?>
 
             </form>
 

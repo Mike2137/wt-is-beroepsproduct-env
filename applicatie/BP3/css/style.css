@@ -412,22 +412,3 @@ footer section h2 {
     padding: 0.4rem 0.8rem;
     cursor: pointer;
 }
-
-.shopping-cart div {
-    margin-top: 20px;
-}
-
-.menu-selection h1 {
-    width: 100%;
-    text-align: center;
-}
-
-.menu-selection h2 {
-    width: 100%;
-    text-align: center;
-}
-
-.error-message {
-    color: #d00000;
-    margin-bottom: 15px;
-}

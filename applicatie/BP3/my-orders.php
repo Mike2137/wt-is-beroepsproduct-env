@@ -1,8 +1,10 @@
 <?php
+
 $pageTitle = "My Orders";
 
 session_start();
 
+// Only logged-in customers are allowed to access this page.
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'customer') {
     header("Location: login.php");
     exit;
@@ -21,6 +23,7 @@ $connection = createConnection();
 
 $username = $_SESSION['username'];
 
+// Retrieve all orders belonging to the logged-in customer.
 $sql = "
     SELECT order_id, datetime, status
     FROM Pizza_Order
@@ -35,10 +38,11 @@ $statement->execute([
 ]);
 
 $orders = $statement->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
-
 <main>
+
     <section class="orders">
 
         <h1>My Orders</h1>
@@ -46,12 +50,16 @@ $orders = $statement->fetchAll(PDO::FETCH_ASSOC);
         <table>
 
             <thead>
+
                 <tr>
+
                     <th>Order ID</th>
                     <th>Date</th>
                     <th>Items</th>
                     <th>Status</th>
+
                 </tr>
+
             </thead>
 
             <tbody>
@@ -59,11 +67,13 @@ $orders = $statement->fetchAll(PDO::FETCH_ASSOC);
                 <?php foreach ($orders as $order): ?>
 
                     <?php
+
+                    // Retrieve the products belonging to the current order.
                     $sql = "
-            SELECT product_name, quantity
-            FROM Pizza_Order_Product
-            WHERE order_id = :order_id
-        ";
+                        SELECT product_name, quantity
+                        FROM Pizza_Order_Product
+                        WHERE order_id = :order_id
+                    ";
 
                     $statement = $connection->prepare($sql);
 
@@ -79,7 +89,9 @@ $orders = $statement->fetchAll(PDO::FETCH_ASSOC);
                         $itemList[] = $item['quantity'] . "x " . $item['product_name'];
                     }
 
+                    // Convert the numeric order status into a readable label.
                     switch ($order['status']) {
+
                         case 1:
                             $status = "Pending";
                             break;
@@ -95,9 +107,11 @@ $orders = $statement->fetchAll(PDO::FETCH_ASSOC);
                         default:
                             $status = "Unknown";
                     }
+
                     ?>
 
                     <tr>
+
                         <td>#<?= $order['order_id'] ?></td>
 
                         <td><?= date('d-m-Y', strtotime($order['datetime'])) ?></td>
@@ -105,6 +119,7 @@ $orders = $statement->fetchAll(PDO::FETCH_ASSOC);
                         <td><?= implode(", ", $itemList) ?></td>
 
                         <td><?= $status ?></td>
+
                     </tr>
 
                 <?php endforeach; ?>
@@ -118,5 +133,7 @@ $orders = $statement->fetchAll(PDO::FETCH_ASSOC);
 </main>
 
 <?php
+
 require_once 'includes/footer.php';
+
 ?>

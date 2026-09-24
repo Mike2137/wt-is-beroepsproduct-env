@@ -13,10 +13,9 @@
 
     <section>
         <h3>Information</h3>
-        <a href="privacy-statement.php">Privacy Policy</a>
+        <a href="pages/privacy-statement.php">Privacy Policy</a>
     </section>
 </footer>
-
 </body>
 
 </html>

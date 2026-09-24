@@ -1,8 +1,10 @@
 <?php
+
 $pageTitle = "Checkout";
 
 session_start();
 
+// Check if the customer is logged in.
 if (!isset($_SESSION['username'])) {
     header("Location: login-customer.php");
     exit;
@@ -14,50 +16,50 @@ require_once 'includes/db_connection.php';
 
 $connection = createConnection();
 
+// Process the order after the checkout form is submitted.
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $address = $_POST['address'];
 
+    $address = $_POST['address'];
     $username = $_SESSION['username'];
 
+    // Get the customer's name from the database.
     $sql = "
-    SELECT first_name, last_name
-    FROM [User]
-    WHERE username = :username
-";
+        SELECT first_name, last_name
+        FROM [User]
+        WHERE username = :username
+    ";
 
     $statement = $connection->prepare($sql);
-
     $statement->execute([
         ':username' => $username
     ]);
 
     $user = $statement->fetch(PDO::FETCH_ASSOC);
-
     $clientName = $user['first_name'] . " " . $user['last_name'];
 
     $status = 1;
 
+    // Create the new order.
     $sql = "
-    INSERT INTO Pizza_Order (
-        client_username,
-        client_name,
-        personnel_username,
-        datetime,
-        address,
-        status
-    )
-    VALUES (
-        :client_username,
-        :client_name,
-        :personnel_username,
-        GETDATE(),
-        :address,
-        :status
-    )
-";
+        INSERT INTO Pizza_Order (
+            client_username,
+            client_name,
+            personnel_username,
+            datetime,
+            address,
+            status
+        )
+        VALUES (
+            :client_username,
+            :client_name,
+            :personnel_username,
+            GETDATE(),
+            :address,
+            :status
+        )
+    ";
 
     $statement = $connection->prepare($sql);
-
     $statement->execute([
         ':client_username' => $username,
         ':client_name' => $clientName,
@@ -66,34 +68,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ':status' => $status
     ]);
 
+    // Get the ID of the newly created order.
     $sql = "
-    SELECT MAX(order_id) AS order_id
-    FROM Pizza_Order
-";
+        SELECT MAX(order_id) AS order_id
+        FROM Pizza_Order
+    ";
 
     $statement = $connection->query($sql);
-
     $order = $statement->fetch(PDO::FETCH_ASSOC);
-
     $orderId = $order['order_id'];
 
     $sql = "
-    INSERT INTO Pizza_Order_Product (
-        order_id,
-        product_name,
-        quantity
-    )
-    VALUES (
-        :order_id,
-        :product_name,
-        :quantity
-    )
-";
+        INSERT INTO Pizza_Order_Product (
+            order_id,
+            product_name,
+            quantity
+        )
+        VALUES (
+            :order_id,
+            :product_name,
+            :quantity
+        )
+    ";
 
     $statement = $connection->prepare($sql);
 
     foreach ($_SESSION['cart'] as $productName => $quantity) {
-
         $statement->execute([
             ':order_id' => $orderId,
             ':product_name' => $productName,
@@ -106,17 +106,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-
 ?>
 
 <main>
+
     <section class="checkout">
 
         <h1>Delivery Information</h1>
 
         <form method="post">
-
             <label for="address">Delivery Address</label>
+
             <input
                 type="text"
                 id="address"
@@ -127,12 +127,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <button type="submit" class="btn">
                 Place Order
             </button>
-
         </form>
 
     </section>
+
 </main>
 
 <?php
+
 require_once 'includes/footer.php';
+
 ?>

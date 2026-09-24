@@ -1,4 +1,5 @@
 <?php
+
 $pageTitle = "Register";
 
 require_once 'includes/header.php';
@@ -7,7 +8,9 @@ require_once 'includes/db_connection.php';
 
 $connection = createConnection();
 
+// Process the registration form when it is submitted.
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
     $firstName = $_POST['firstname'];
     $lastName = $_POST['lastname'];
     $username = $_POST['username'];
@@ -15,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = $_POST['password'];
     $confirmPassword = $_POST['confirm_password'];
 
+    // Check whether both entered passwords match.
     if ($password !== $confirmPassword) {
         echo "Passwords do not match.";
         exit;
@@ -22,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
+    // Store the new customer in the database using a prepared statement.
     $sql = "
         INSERT INTO [User] (
             username,
@@ -55,9 +60,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     header("Location: login-customer.php");
     exit;
 }
+
 ?>
 
 <main>
+
     <section class="register-container">
 
         <div class="register-card">
@@ -71,22 +78,53 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <form method="post">
 
                 <label for="firstname">First Name</label>
-                <input type="text" id="firstname" name="firstname" required>
+
+                <input
+                    type="text"
+                    id="firstname"
+                    name="firstname"
+                    required>
 
                 <label for="lastname">Last Name</label>
-                <input type="text" id="lastname" name="lastname" required>
+
+                <input
+                    type="text"
+                    id="lastname"
+                    name="lastname"
+                    required>
 
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    required>
 
                 <label for="address">Address</label>
-                <input type="text" id="address" name="address" placeholder="Street and house number" required>
+
+                <input
+                    type="text"
+                    id="address"
+                    name="address"
+                    placeholder="Street and house number"
+                    required>
 
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required>
 
                 <label for="confirm_password">Confirm Password</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
+
+                <input
+                    type="password"
+                    id="confirm_password"
+                    name="confirm_password"
+                    required>
 
                 <button type="submit" class="btn">
                     Register
@@ -95,15 +133,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </form>
 
             <p class="login-link">
+
                 Already have an account?
+
                 <a href="login-customer.php">Login here</a>
+
             </p>
 
         </div>
 
     </section>
+
 </main>
 
 <?php
+
 require_once 'includes/footer.php';
+
 ?>

@@ -1,8 +1,10 @@
 <?php
+
 $pageTitle = "Staff Orders";
 
 session_start();
 
+// Only personnel users are allowed to access this page.
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Personnel') {
     header("Location: login.php");
     exit;
@@ -14,6 +16,7 @@ require_once 'includes/db_connection.php';
 
 $connection = createConnection();
 
+// Update the order status when a staff member submits the form.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $orderId = $_POST['order_id'];
@@ -36,27 +39,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
+// Retrieve all orders and their associated products.
 $sql = "
-SELECT
-    po.order_id,
-    po.client_name,
-    po.datetime,
-    po.status,
-    pop.product_name,
-    pop.quantity,
-    p.price
-FROM Pizza_Order AS po
-JOIN Pizza_Order_Product AS pop
-    ON po.order_id = pop.order_id
-JOIN Product AS p
-    ON pop.product_name = p.name
-ORDER BY po.datetime DESC;
+    SELECT
+        po.order_id,
+        po.client_name,
+        po.datetime,
+        po.status,
+        pop.product_name,
+        pop.quantity,
+        p.price
+    FROM Pizza_Order AS po
+    JOIN Pizza_Order_Product AS pop
+        ON po.order_id = pop.order_id
+    JOIN Product AS p
+        ON pop.product_name = p.name
+    ORDER BY po.datetime DESC;
 ";
 
 $results = $connection->query($sql);
 
 $orders = [];
 
+// Group the database results by order so each order is displayed once.
 foreach ($results as $row) {
 
     $orderId = $row['order_id'];
@@ -76,10 +81,13 @@ foreach ($results as $row) {
         'price' => $row['price']
     ];
 }
+
 ?>
 
 <main class="staff-orders">
+
     <h1>Staff orders:</h1>
+
     <?php foreach ($orders as $orderId => $order): ?>
 
         <div class="order-card">
@@ -93,28 +101,56 @@ foreach ($results as $row) {
             <p><strong>Items:</strong></p>
 
             <ul>
+
                 <?php foreach ($order['products'] as $product): ?>
+
                     <li>
+
                         <?= $product['quantity'] ?>x
                         <?= htmlspecialchars($product['name']) ?>
                         - €<?= number_format($product['price'] * $product['quantity'], 2) ?>
+
                     </li>
+
                 <?php endforeach; ?>
+
             </ul>
 
             <form method="POST">
 
-                <input type="hidden" name="order_id" value="<?= $orderId ?>">
+                <input
+                    type="hidden"
+                    name="order_id"
+                    value="<?= $orderId ?>">
 
                 <label for="status<?= $orderId ?>">Order Status</label>
 
                 <select name="status" id="status<?= $orderId ?>">
-                    <option value="1" <?= $order['status'] == 1 ? 'selected' : '' ?>>Received</option>
-                    <option value="2" <?= $order['status'] == 2 ? 'selected' : '' ?>>Preparing</option>
-                    <option value="3" <?= $order['status'] == 3 ? 'selected' : '' ?>>In Oven</option>
-                    <option value="4" <?= $order['status'] == 4 ? 'selected' : '' ?>>Ready for Delivery</option>
-                    <option value="5" <?= $order['status'] == 5 ? 'selected' : '' ?>>On The Way</option>
-                    <option value="6" <?= $order['status'] == 6 ? 'selected' : '' ?>>Delivered</option>
+
+                    <option value="1" <?= $order['status'] == 1 ? 'selected' : '' ?>>
+                        Received
+                    </option>
+
+                    <option value="2" <?= $order['status'] == 2 ? 'selected' : '' ?>>
+                        Preparing
+                    </option>
+
+                    <option value="3" <?= $order['status'] == 3 ? 'selected' : '' ?>>
+                        In Oven
+                    </option>
+
+                    <option value="4" <?= $order['status'] == 4 ? 'selected' : '' ?>>
+                        Ready for Delivery
+                    </option>
+
+                    <option value="5" <?= $order['status'] == 5 ? 'selected' : '' ?>>
+                        On The Way
+                    </option>
+
+                    <option value="6" <?= $order['status'] == 6 ? 'selected' : '' ?>>
+                        Delivered
+                    </option>
+
                 </select>
 
                 <button type="submit">Update Status</button>
@@ -124,8 +160,11 @@ foreach ($results as $row) {
         </div>
 
     <?php endforeach; ?>
+
 </main>
 
 <?php
+
 require_once 'includes/footer.php';
+
 ?>

@@ -1,10 +1,12 @@
 <?php
-$pageTitle = "Menu";
 
+$pageTitle = "Menu";
 
 session_start();
 
+// Add the selected product to the shopping cart.
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
     $productName = $_POST['product_name'];
 
     if (!isset($_SESSION['cart'])) {
@@ -18,13 +20,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-
 require_once 'includes/header.php';
 require_once 'includes/navigation.php';
 require_once 'includes/db_connection.php';
 
 $connection = createConnection();
 
+// Retrieve all pizzas from the database.
 $sql = "
     SELECT name, description, image, price
     FROM Product
@@ -36,14 +38,21 @@ $products = $connection->query($sql);
 ?>
 
 <main>
+
     <section class="menu-selection">
+
         <h1>OUR PIZZAS</h1>
+
         <h2>Experience the taste of Italy</h2>
+
         <hr>
 
         <div class="pizza-grid">
+
             <?php foreach ($products as $product): ?>
+
                 <article class="pizza-card">
+
                     <img
                         src="images/<?= htmlspecialchars($product['image']) ?>"
                         alt="<?= htmlspecialchars($product['name']) ?>">
@@ -55,6 +64,7 @@ $products = $connection->query($sql);
                     <p>€<?= number_format($product['price'], 2) ?></p>
 
                     <form method="post">
+
                         <input
                             type="hidden"
                             name="product_name"
@@ -63,14 +73,21 @@ $products = $connection->query($sql);
                         <button type="submit" class="btn card-button">
                             Order Now
                         </button>
+
                     </form>
+
                 </article>
+
             <?php endforeach; ?>
+
         </div>
 
     </section>
+
 </main>
 
 <?php
+
 require_once 'includes/footer.php';
+
 ?>

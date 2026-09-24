@@ -1,11 +1,12 @@
 <?php
 
+// Database connection settings.
 $db_host = "host.docker.internal,1434";
 $db_name = "pizzeria";
-
 $db_user = "sa";
 $db_password = "abc123!@#";
 
+// Create a PDO connection to the SQL Server database.
 $connection = new PDO(
     "sqlsrv:Server=$db_host;Database=$db_name;TrustServerCertificate=1",
     $db_user,
